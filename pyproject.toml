@@ -1,0 +1,15 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=69", "setuptools_scm>=8"]
+
+[project]
+name = "streamlit-bokeh-events"
+version = "0.1.4"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9.8"
+dependencies = [
+    "bokeh>=2.4.3,<3",
+    "numpy<2",
+    "streamlit",
+]
