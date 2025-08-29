@@ -1,4 +1,4 @@
-# streamlit-bokeh3-events
+# streamlit-bokeh-events
 A streamlit component for bi-directional communication with bokeh 2.4.3 plots. This update is based on the following archived repository from ash2shukla: https://github.com/ash2shukla/streamlit-bokeh-events
 
 # App
