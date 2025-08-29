@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@bokeh/bokehjs": "^2.4.3",
+    "@bokeh/bokehjs": "2.4.3",
     "@bokeh/numbro": "^1.6.2",
     "@bokeh/slickgrid": "~2.4.2702",
     "choices.js": "^9.0.1",
