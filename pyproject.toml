@@ -1,15 +1,26 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools>=69", "setuptools_scm>=8"]
+requires = ["setuptools>=69"]
 
 [project]
 name = "streamlit-bokeh-events"
-version = "0.1.4"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.9.8"
-dependencies = [
-    "bokeh>=2.4.3,<3",
-    "numpy<2",
-    "streamlit",
+authors = [
+  { name = "Ashish Shukla" },
+  { name = "Christoph Naumann" },
+  { name = "Guilherme Zagatti" },
 ]
+version = "0.1.4"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["bokeh>=2.4.3,<3", "numpy<2", "streamlit"]
+description="A custom streamlit component to return js event values from bokeh plots to streamlit"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.package-data]
+"streamlit_bokeh_events" = ["frontend/build/**"]
+
+[tool.setuptools.packages.find]
+include = ["streamlit_bokeh_events*"]
+exclude = ["streamlit_bokeh_events.frontend*"]
