@@ -10,15 +10,25 @@ _RELEASE = True
 
 if not _RELEASE:
     _component_func = components.declare_component(
-        "streamlit_bokeh_events", url="http://localhost:3001",
+        "streamlit_bokeh_events",
+        url="http://localhost:3001",
     )
 else:
     parent_dir = os.path.dirname(os.path.abspath(__file__))
     build_dir = os.path.join(parent_dir, "frontend/build")
-    _component_func = components.declare_component("streamlit_bokeh_events", path=build_dir)
+    _component_func = components.declare_component(
+        "streamlit_bokeh_events", path=build_dir
+    )
 
 
-def streamlit_bokeh_events(bokeh_plot=None, events="", key=None, debounce_time=1000, refresh_on_update=True, override_height=None):
+def streamlit_bokeh_events(
+    bokeh_plot=None,
+    events="",
+    key=None,
+    debounce_time=1000,
+    refresh_on_update=True,
+    override_height=None,
+):
     """Returns event dict
 
     Keyword arguments:
@@ -43,9 +53,10 @@ def streamlit_bokeh_events(bokeh_plot=None, events="", key=None, debounce_time=1
         default=None,
         debounce_time=debounce_time,
         refresh_on_update=refresh_on_update,
-        override_height=override_height
+        override_height=override_height,
     )
     return component_value
+
 
 if not _RELEASE:
     import streamlit as st
@@ -59,10 +70,14 @@ if not _RELEASE:
     # import function
     # from streamlit_bokeh_events import streamlit_bokeh_events
     col1, col2 = st.columns(2)
-    df = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv')
+    df = pd.read_csv(
+        "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
+    )
     # create plot
     cds = ColumnDataSource(df)
-    columns = list(map(lambda colname: TableColumn(field=colname, title=colname), df.columns))
+    columns = list(
+        map(lambda colname: TableColumn(field=colname, title=colname), df.columns)
+    )
 
     # define events
     cds.selected.js_on_change(
@@ -73,8 +88,8 @@ if not _RELEASE:
             document.dispatchEvent(
                 new CustomEvent("INDEX_SELECT", {detail: {data: source.selected.indices}})
             )
-            """
-        )
+            """,
+        ),
     )
 
     table = DataTable(source=cds, columns=columns)
@@ -85,14 +100,16 @@ if not _RELEASE:
             key="fooInit",
             refresh_on_update=False,
             debounce_time=0,
-            override_height=500
+            override_height=500,
         )
         if result:
             if result.get("INDEX_SELECT"):
                 st.write(df.iloc[result.get("INDEX_SELECT")["data"]])
 
     plot = figure(tools="lasso_select,zoom_in")
-    df["colors"] = df.species.replace({"setosa": "#583d72", "versicolor": "#9f5f80", "virginica": "#ffba93"})
+    df["colors"] = df.species.replace(
+        {"setosa": "#583d72", "versicolor": "#9f5f80", "virginica": "#ffba93"}
+    )
     cds_lasso = ColumnDataSource(df)
     cds_lasso.selected.js_on_change(
         "indices",
@@ -102,18 +119,27 @@ if not _RELEASE:
             document.dispatchEvent(
                 new CustomEvent("LASSO_SELECT", {detail: {data: source.selected.indices}})
             )
-            """
-        )
+            """,
+        ),
     )
 
-    plot.circle("sepal_length", "sepal_width", fill_alpha=0.5, color="colors", size=10, line_color=None, source=cds_lasso)
+    plot.scatter(
+        "sepal_length",
+        "sepal_width",
+        fill_alpha=0.5,
+        color="colors",
+        size=10,
+        line_color=None,
+        source=cds_lasso,
+    )
     with col2:
         result_lasso = streamlit_bokeh_events(
             bokeh_plot=plot,
             events="LASSO_SELECT",
             key="bar",
             refresh_on_update=False,
-            debounce_time=0)
+            debounce_time=0,
+        )
         if result_lasso:
             if result_lasso.get("LASSO_SELECT"):
                 st.write(df.iloc[result_lasso.get("LASSO_SELECT")["data"]])

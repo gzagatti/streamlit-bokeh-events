@@ -9,10 +9,10 @@ authors = [
   { name = "Christoph Naumann" },
   { name = "Guilherme Zagatti" },
 ]
-version = "0.1.4"
+version = "0.1.5"
 readme = "README.md"
-requires-python = ">=3.9"
-dependencies = ["bokeh>=2.4.3,<3", "numpy<2", "streamlit"]
+requires-python = ">=3.13,<3.14"
+dependencies = ["bokeh==3.7.3", "streamlit"]
 description="A custom streamlit component to return js event values from bokeh plots to streamlit"
 
 [tool.setuptools]
