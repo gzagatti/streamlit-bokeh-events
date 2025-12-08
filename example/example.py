@@ -32,7 +32,7 @@ source.selected.js_on_change(
 
 event_result = streamlit_bokeh_events(
     events="TestSelectEvent",
-    bokeh_plot=plot,
+    figure=plot,
     key="foo1",
     debounce_time=100,
     refresh_on_update=False

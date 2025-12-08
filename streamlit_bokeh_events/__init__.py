@@ -1,10 +1,13 @@
-from bokeh.embed import json_item
+import importlib
 import json
-
 import os
 from random import choices
 from string import ascii_letters
+from typing import TYPE_CHECKING
+
+import bokeh
 import streamlit.components.v1 as components
+from bokeh.embed import json_item
 
 _RELEASE = True
 
@@ -20,14 +23,20 @@ else:
         "streamlit_bokeh_events", path=build_dir
     )
 
+if TYPE_CHECKING:
+    from bokeh.plotting.figure import Figure
+
+__version__ = importlib.metadata.version("streamlit_bokeh_events")
+REQUIRED_BOKEH_VERSION = "3.7.3"
+
 
 def streamlit_bokeh_events(
-    bokeh_plot=None,
-    events="",
-    key=None,
-    debounce_time=1000,
-    refresh_on_update=True,
-    override_height=None,
+    figure: "Figure",
+    events: str = "",
+    key: str | None = None,
+    debounce_time: int = 1000,
+    refresh_on_update: bool = True,
+    override_height: float | int = None,
 ):
     """Returns event dict
 
@@ -39,11 +48,14 @@ def streamlit_bokeh_events(
         : Set to False if you are not updating the datasource at runtime
     override_height -- Override plot viewport height
     """
-    if key is None:
-        raise ValueError("key can not be None.")
+    if bokeh.__version__ != REQUIRED_BOKEH_VERSION:
+        raise Exception(
+            f"Streamlit only supports Bokeh version {REQUIRED_BOKEH_VERSION}, "
+            f"but you have version {bokeh.__version__} installed."
+        )
 
     div_id = "".join(choices(ascii_letters, k=16))
-    fig_dict = json_item(bokeh_plot, div_id)
+    fig_dict = json_item(figure, div_id)
     json_figure = json.dumps(fig_dict)
     component_value = _component_func(
         bokeh_plot=json_figure,
@@ -59,11 +71,9 @@ def streamlit_bokeh_events(
 
 
 if not _RELEASE:
-    import streamlit as st
     import pandas as pd
-    from bokeh.plotting import figure
-    from bokeh.models import ColumnDataSource, CustomJS
-    from bokeh.models import DataTable, TableColumn
+    import streamlit as st
+    from bokeh.models import ColumnDataSource, CustomJS, DataTable, TableColumn
     from bokeh.plotting import figure
 
     st.set_page_config(layout="wide")
@@ -95,7 +105,7 @@ if not _RELEASE:
     table = DataTable(source=cds, columns=columns)
     with col1:
         result = streamlit_bokeh_events(
-            bokeh_plot=table,
+            figure=table,
             events="INDEX_SELECT",
             key="fooInit",
             refresh_on_update=False,
@@ -134,7 +144,7 @@ if not _RELEASE:
     )
     with col2:
         result_lasso = streamlit_bokeh_events(
-            bokeh_plot=plot,
+            figure=plot,
             events="LASSO_SELECT",
             key="bar",
             refresh_on_update=False,

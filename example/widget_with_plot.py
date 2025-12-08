@@ -31,7 +31,7 @@ cds.selected.js_on_change(
 table = DataTable(source=cds, columns=columns)
 with col1:
     result = streamlit_bokeh_events(
-        bokeh_plot=table,
+        figure=table,
         events="INDEX_SELECT",
         key="foo",
         refresh_on_update=False,
@@ -60,7 +60,7 @@ cds_lasso.selected.js_on_change(
 plot.circle("sepal_length", "sepal_width", fill_alpha=0.5, color="colors", size=10, line_color=None, source=cds_lasso)
 with col2:
     result_lasso = streamlit_bokeh_events(
-        bokeh_plot=plot,
+        figure=plot,
         events="LASSO_SELECT",
         key="bar",
         refresh_on_update=False,
